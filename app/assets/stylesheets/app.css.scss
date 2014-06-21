@@ -1,0 +1,17 @@
+@import "bootstrap";
+
+.products, .product-show {
+  @extend .row;
+}
+
+li {
+  @extend .col-md-2;
+}
+
+.product-image {
+  @extend .col-md-3;
+}
+
+.product-detail {
+  @extend .col-md-6;
+}

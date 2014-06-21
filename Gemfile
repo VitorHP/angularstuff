@@ -15,6 +15,7 @@ gem 'pg'
 gem 'simple_form'
 gem 'therubyracer', :platform=>:ruby
 gem 'angularjs-rails'
+gem 'angular-ui-bootstrap-rails'
 
 group :development do
   gem 'better_errors'
