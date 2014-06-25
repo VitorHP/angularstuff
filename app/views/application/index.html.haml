@@ -1,24 +1,38 @@
-.cart{ 'ng-controller' => 'CartController as controller' }
-  %p Cart has {{count()}} item(s)
-
-  %ul{ 'ng-show' => 'count() > 0' }
-    %li{ 'ng-repeat' => 'item in items()' }
-      %span= "{{item.variant.sku}} x{{item.qty}}"
 
 %ng-view
 
 %script{ type: 'text/ng-template', id: 'product-list.html' }
+  %cart
   %ul
-    %li{ 'ng-repeat' => 'product in products' }
+    %li.product{ 'ng-repeat' => 'product in products' }
       %p {{product.name}}
       %img{ src: '{{product.photo}}' }
 
       %a{ href: '#/products/{{product.id}}' } Ver Mais
 
 %script{ type: 'text/ng-template', id: 'product-show.html' }
+  %cart
   .product-show
     %productimage
     %productdetail
+
+%script{ type: 'text/ng-template', id: 'checkout-cart.html' }
+  %a{ href: '#/products' } Back to the store
+  .checkout-cart
+    %table.table.table-stripped
+      %thead
+        %th Product
+        %th Qty
+        %th Actions
+      %tbody
+        %tr{ 'ng-repeat' => 'item in items()' }
+          %td {{ item.variant.sku }}
+          %td
+            %button{ 'ng-click' => 'remove(item.variant)' } -
+            %span {{ item.qty }}
+            %button{ 'ng-click' => 'add(item.variant)' } +
+          %td
+            %button{ 'ng-click' => 'remove(item.variant, true)' } x
 
 %script{ type: 'text/ng-template', id: 'product-detail.html' }
   .product-detail
@@ -32,3 +46,17 @@
 %script{ type: 'text/ng-template', id: 'product-image.html' }
   .product-image
     %img{ src: '{{selectedVariant.photo}}' }
+
+
+%script{ type: 'text/ng-template', id: 'cart.html' }
+  .cart{ 'ng-controller' => 'CartController as controller' }
+    %p
+      %spanCart has {{count()}} item(s)
+      %a{ 'ng-hide' => 'empty()', href: '#/checkout/cart' } Checkout
+
+    %ul{ 'ng-hide' => 'empty()' }
+      %li{ 'ng-repeat' => 'item in items()' }
+        %span= "{{item.variant.sku}} x{{item.qty}}"
+        %button{ 'ng-click' => 'remove(item.variant, true)' } Remove
+
+

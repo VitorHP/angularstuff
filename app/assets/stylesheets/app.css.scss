@@ -4,7 +4,7 @@
   @extend .row;
 }
 
-li {
+li.product {
   @extend .col-md-2;
 }
 
@@ -14,4 +14,8 @@ li {
 
 .product-detail {
   @extend .col-md-6;
+}
+
+.checkout-cart {
+  @extend .col-md-12;
 }

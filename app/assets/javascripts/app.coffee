@@ -9,9 +9,11 @@ app.config ($routeProvider, $locationProvider) ->
     .when '/products/:id',
       templateUrl: 'product-show.html'
       controller: 'ProductsShowController'
+    .when '/checkout/cart',
+      templateUrl: 'checkout-cart.html'
+      controller: 'CartController'
     .otherwise
       redirectTo: '/'
-
 
 app.factory 'ProductsService', ->
   products = [
@@ -42,7 +44,7 @@ app.factory 'ProductsService', ->
       name: 'Nexus 4'
       photo: 'https://desbloqueados-us-xlsol-com.s3.amazonaws.com/desbloqueados_test/product_images/0000/2950/large.jpg?1382968481'
       variants: [{
-        sku: '123'
+        sku: '555'
         color: 'White'
         photo: 'https://desbloqueados-us-xlsol-com.s3.amazonaws.com/desbloqueados_test/product_images/0000/2950/large.jpg?1382968481'
         prices: [{
@@ -50,7 +52,7 @@ app.factory 'ProductsService', ->
           price: 50.0
         }]
       },{
-        sku: '222'
+        sku: '789'
         color: 'Black'
         photo: 'https://desbloqueados-us-xlsol-com.s3.amazonaws.com/desbloqueados_test/product_images/0000/2953/large.jpg?1382968493'
         prices: [{
@@ -87,6 +89,13 @@ app.factory 'CartService', ->
         items.push
           variant: variant
           qty: 1
+    remove: (variant, removeAll = false) ->
+      item = findItem(variant.sku)
+      if item?
+        if removeAll || item.qty == 1
+          items.splice(items.indexOf(item), 1)
+        else
+          item.qty -= 1
     items: ->
       items
     count: ->
@@ -105,6 +114,12 @@ app.directive 'productimage', ->
   return {
     restrict: 'E'
     templateUrl: 'product-image.html'
+  }
+
+app.directive 'cart', ->
+  return {
+    restrict: 'E'
+    templateUrl: 'cart.html'
   }
 
 app.controller 'ProductsController', ($scope, ProductsService) ->
@@ -131,3 +146,12 @@ app.controller 'CartController', ($scope, CartService) ->
 
   $scope.items = ->
     CartService.items()
+
+  $scope.add = (variant) ->
+    CartService.add(variant)
+
+  $scope.remove = (variant, removeAll = false) ->
+    CartService.remove(variant, removeAll)
+
+  $scope.empty = ->
+    CartService.count() == 0
